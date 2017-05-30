@@ -1,49 +1,162 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+  <title>reveal.js</title>
+  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"> 
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="css/theme/electron.css">
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section data-transition="convex">
+        <h1>Slide 1</h1>
+        <div>kek</div>
+      </section>
+      <section data-transition="convex">
+        <h2>MS Paint 2017</h2>
+        TODO video
+      </section>
+      <section data-transition="convex">
+        <h2>Electron</h2>
+        <div>+</div>
+        <h2>Native Innovatrics Libraries</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Electron</h2>
+        <div>TODO image</div>
+        <h2>Chromium + Node</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Electron</h2>
+        <div>TODO image processes separation</div>
+      </section>
+      <section data-transition="convex">
+        <h2>Brief security</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Renderer process node example</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Renderer process same in browser and electron</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Main Process</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Main Process Images</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>IPC</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Electron remote</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Electron roundup</h2>
+      </section>
+      <section data-transition="convex">
+        <h1>What about c++?</h1>
+      </section>
+      <section data-transition="convex">
+        <h2>Nan, node-gyp, stuff</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Our situation: .vsprojx </h2>
+      </section>
+      <section data-transition="convex">
+        <h2>FFI</h2>
+        <div>Node.js Foreign Function Interface</div>
+        <div>A set of methods to call a function from dynamic library (.dll in case of Windows) via javascript</div>
+        <div>You only build the node-ffi lib itself and provide the lib in compiled state for current architecture</div>
+      </section>
+      <section data-transition="convex">
+        <h2>FFI Disadvantages</h2>
+        <div>no cross-platform build process (or you'll need to roll one on your own)</div>
+        <div>call overhead</div>
+        <div>debugging is horrible</div>
+      </section>
+      <section data-transition="convex">
+        <h2>Step 1: get your library</h2>
+        TODO win screen
+      </section>
+      <section data-transition="convex">
+        <h2>Step 2: reference compiled function</h2>
+        TODO win screen
+      </section>
+      <section data-transition="none">
+        <h2>Step 2: reference compiled function</h2>
+        todo code
+      </section>
+      <section data-transition="convex">
+        <h2>Step 3: call (almost) like an async function</h2>
+        TODO coe
+      </section>
+      <section data-transition="convex">
+        <h2>Node ref</h2>
+        <div>Internally, everything (non-primitive) is sent as raw data in Buffers</div>
+        <div>Provides 'types'</div>
+        <div>(There's a Pointer class in node.js but this is better)</div>
+      </section>
+      <section data-transition="convex">
+        <h2>Node ref</h2>
+          TODO example
+      </section>
+      <section data-transition="convex">
+        <h2>Node ref ref</h2>
+          TODO example
+      </section>
+      <section data-transition="convex">
+        <h2>Video</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Sum</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>Electron userland?</h2>
+      </section>
+      <section data-transition="convex">
+        <h2>A case against electron</h2>
+      </section>
+      <section data-transition="convex">
+        <h1>Thank you!</h1>
+        <h2>Questions?</h2>
+      </section>
+    </div>
+  </div>
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
-
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
-</html>
+  <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+              controls: false,
+              dependencies: [
+              { src: 'plugin/markdown/marked.js' },
+              { src: 'plugin/markdown/markdown.js' },
+              { src: 'plugin/notes/notes.js', async: true },
+              { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+              });
+            </script>
+          </body>
+          </html>
