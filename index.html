@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <title>reveal.js</title>
-  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
   <link rel="stylesheet" href="css/reveal.css">
   <link rel="stylesheet" href="css/custom.css">
   <link rel="stylesheet" href="css/theme/electron.css">
@@ -26,113 +26,311 @@
   <div class="reveal">
     <div class="slides">
       <section data-transition="convex">
-        <h1>Slide 1</h1>
-        <div>kek</div>
+				<img class="noImageStyling" src="electron-logo.svg"/>
+        <h3>& Native Library Integration</h3>
       </section>
-      <section data-transition="convex">
+      <section data-transition="convex" data-state="firstvideo">
         <h2>MS Paint 2017</h2>
-        TODO video
+				<video id="firstvideo">
+			    <source src="video.mp4" type="video/mp4" autoplay loop/>
+			  </video>
       </section>
       <section data-transition="convex">
         <h2>Electron</h2>
-        <div>+</div>
+        <h3 style="color: #5d98a2">+</h3>
         <h2>Native Innovatrics Libraries</h2>
       </section>
       <section data-transition="convex">
-        <h2>Electron</h2>
-        <div>TODO image</div>
-        <h2>Chromium + Node</h2>
+        <img src="components.png"/>
+      </section>
+      <section data-transition="convex">
+        <h2>Processes</h2>
+        <img src="proc.png" height="450px"/>
+      </section>
+			<section data-transition="convex">
+        <img src="main.png"/>
+      </section>
+			<section data-transition="convex">
+        <h2>Main process</h2>
+				<pre><code data-trim data-noescape>
+					app.on('ready', async () => {
+					  mainWindow = new BrowserWindow({
+					    show: false,
+					    ...initialWindowSize,
+					    icon: `${__dirname}/app/app.ico`,
+					  })
+
+					  mainWindow.loadURL(`file://${__dirname}/app/app.html`)
+
+					  mainWindow.webContents.on('did-finish-load', () => {
+					    mainWindow.show()
+					    mainWindow.focus()
+					  })
+					/*...*/
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <img src="renderer.png"/>
+      </section>
+			<section data-transition="convex">
+        <h2>Renderer process</h2>
+				<pre><code data-trim data-noescape>
+					export const importFileBuffer = async () => {
+					  const path = await openDialogPromise(
+					    'Template.sud',
+					    [
+					      {name: 'SUD', extensions: ['sud']},
+					    ],
+					  )
+					  if (!path) return
+					  const buffer = await new Promise((resolve, reject) =>
+					    fs.readFile(path, (err, data) =>
+					      err ? reject(err) : resolve(data))
+					  )
+					  if (!buffer) throw new Error('Error while transforming image')
+					  return buffer
+					}
+				</code></pre>
+      </section>
+      <section data-transition="convex">
+        <h2>Note on security</h2>
+				<ul>
+					<li>By default, you get full access to node.js in renderer processess</li>
+					<li>You can still achieve a degree of sandbox through</li>
+				<ul>
+					<li>disabling the node integration, enable contextIsolation in the whole rendere process</li>
+					<li>enclosing the content in webview</li>
+				</ul>
+				</ul>
+      </section>
+			<section data-transition="convex">
+        <blockquote style="padding: 30px">...be aware that displaying arbitrary content from untrusted sources poses a severe security risk that Electron is not intended to handle.</blockquote>
+				<i style="float: right; margin-right: 80px;">Electron docs</i>
+      </section>
+      <section data-transition="convex">
+				<h2>Access to native API</h2>
+        <img src="ipc.png"/>
+      </section>
+			<section data-transition="convex">
+        <h2>Access to native API</h2>
+				<pre><code data-trim data-noescape>
+					const ipc = require('electron').ipcRenderer
+					ipc.send('show-dialog', { msg: 'my message' })
+					ipc.on('dialog-shown', () => { /*do stuff*/ })
+				</code></pre>
+				<pre class="fragment fade-up"><code data-trim data-noescape>
+					const remote = require('electron').remote
+					const dialog = remote.require('dialog')
+					dialog.showErrorBox('My message', 'hi.')
+				</code></pre>
       </section>
       <section data-transition="convex">
         <h2>Electron</h2>
-        <div>TODO image processes separation</div>
+				<ul>
+					<li>write or reuse our existing web app</li>
+					<li>access to file system and networking via node.js</li>
+					<li>control windows and native elements from main process</li>
+				</ul>
       </section>
       <section data-transition="convex">
-        <h2>Brief security</h2>
+        <h1>What about running native code?</h1>
+      </section>
+			<section data-transition="convex">
+        <h3>We'll talk about C++, but if you need Java or Python, wrappers do exist</h3>
+				<img src="wrap.gif"/>
       </section>
       <section data-transition="convex">
-        <h2>Renderer process node example</h2>
+        <h2>The node-addon way</h2>
+				<ul>
+					<li>The most performant option</li>
+					<li>Native code compiles using node-gyp</li>
+					<li>Requires a working knowledge of V8 and it's types</li>
+				</ul>
+      </section>
+			<section data-transition="convex">
+        <img src="hard.gif"/>
+			</section>
+			<section data-transition="convex">
+				<h2>Our situation: .vsprojx </h2>
+				<img src="vs.png"/>
+			</section>
+      <section data-transition="convex">
+        <h2>node-ffi</h2>
+				<ul>
+	        <li>node.js foreign function interface</li>
+	        <li>call a function from dynamic library (.dll in case of Windows) via javascript</li>
+	        <li>only build the node-ffi lib itself and provide the lib in compiled state for current architecture</li>
+				</ul>
       </section>
       <section data-transition="convex">
-        <h2>Renderer process same in browser and electron</h2>
+        <h2>Get symbol name</h2>
+        <img src="walk.png"/>
       </section>
       <section data-transition="convex">
-        <h2>Main Process</h2>
+        <h2>Reference it in js code</h2>
+				<pre><code data-trim data-noescape>
+					const lib = Library('./init', {
+					  '?tryInit@@YAHXZ': [ref.types.int, []],
+					})
+
+					const tryInitCpp = Promise.promisify(
+					  lib['?tryInit@@YAHXZ'].async
+					)
+
+					export const tryInit = async () => {
+					  return !!(await tryInitCpp())
+					}
+				</code></pre>
       </section>
+			<section data-transition="convex">
+        <h2>Arguments?</h2>
+				<p>Primitive types just like in js</p>
+				<p>Pointer types referenced through buffer</p>
+				<pre class="fragment fade-up"><code data-trim data-noescape>
+					const buf = new Buffer(4)
+					buf.writeInt32LE(12345, 0)
+
+					await cppFunc(buf)
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <img src="bread.gif"/>
+      </section>
+			<section data-transition="convex">
+        <h2>node-ref</h2>
+				<ul>
+	        <li>Provides 'types' for function signatures</li>
+	        <li>Simplifies work with pointer types</li>
+				</ul>
+      </section>
+			<section data-transition="convex">
+        <h2>node-ref</h2>
+				<pre><code data-trim data-noescape>
+					/*...*/,
+					const pDataLength = ref.alloc('int')
+				  const pError = ref.alloc('int')
+				  const errorBuff = new Buffer(maxErrorMessageLength)
+				  let ret = await serializeDataCpp(
+				    /*...*/,
+				    pDataLength,
+				    pError,
+						errorBuff,
+					)
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <h2>ref.deref to get value</h2>
+				<pre><code data-trim data-noescape>
+					if (ret) {
+				    dialog.showErrorBox(
+				      'IDKit Library Error',
+				      `Error at lib.op. ${ret}: ${ref.deref(pError)} - ${errorBuff.toString()}`
+				    )
+				    return
+				  }
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <img src="more.jpg"/>
+			</section>
+			<section data-transition="convex">
+        <h2>ref-array</h2>
+				<pre><code data-trim data-noescape>
+					// typedef
+					const IntArray = ArrayType(ref.types.int)
+
+					const a = new IntArray(3)
+					a.length // 5
+					a[0] = 0
+					a[1] = 1
+					a[2] = -1
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <h2>NULL-terminated arrays</h2>
+				<pre><code data-trim data-noescape>
+					const buf = new Buffer(int.size * 3)
+					int.set(buf, int.size * 0, 5)
+					int.set(buf, int.size * 1, 8)
+					int.set(buf, int.size * 2, 0) // terminate with 0s
+
+					const array = IntArray.untilZeros(buf)
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <h2>Usage with ffi</h2>
+				<pre><code data-trim data-noescape>
+					const arg = new IntArray([8, 42, 47])
+					cppFunc(arg, arg.length)
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <img src="waitmore.jpg"/>
+			</section>
+			<section data-transition="convex">
+				<pre><code data-trim data-noescape>
+					// c++ code
+					typedef struct
+					{
+					    unsigned char angle;
+					    unsigned short x;
+					    unsigned short y;
+					    unsigned char type;
+					} IENGINE_MINUTIAE, *IENGINE_MINUTIAE_PTR;
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <h2>ref-struct</h2>
+				<pre><code data-trim data-noescape>
+					const MinutiaeType = StructType({
+					  angle: ref.types.uchar,
+					  x: ref.types.ushort,
+					  y: ref.types.ushort,
+					  type: ref.types.uchar,
+					})
+					const MinutiaeArray = ArrayType(MinutiaeType)
+					'?readUserData@@YAHPAE0PAH01PAUIENGINE_MINUTIAE@@1PAD113H@Z': [
+				    ref.types.int,
+				    [
+							ref.refType(MinutiaeType),
+				      /*...*/,
+				    ],
+				  ],
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+        <h2>ref-struct</h2>
+				<pre><code data-trim data-noescape>
+					const minutiaeData = range(ref.deref(pMinutiaeCount)).map((i) => {
+			      const minutiae = ref.get(minutiaeData, i * MinutiaeType.size, MinutiaeType)
+			      return ({
+			        angle: convertToPixiAngle(minutiae.angle),
+			        x: (minutiae.x - 1: number), // translate from coord system starting from (1,1)
+			        y: (minutiae.y - 1: number),
+			        type: (minutiae.type: number),
+			      })
+			    })
+				</code></pre>
+      </section>
+			<section data-transition="convex">
+				<h2>FFI Disadvantages</h2>
+				<ul>
+					<li>no cross-platform build process (or you'll need to roll one on your own)</li>
+					<li>call overhead</li>
+					<li>debugging is horrible</li>
+				</ul>
+			</section>
       <section data-transition="convex">
-        <h2>Main Process Images</h2>
-      </section>
-      <section data-transition="convex">
-        <h2>IPC</h2>
-      </section>
-      <section data-transition="convex">
-        <h2>Electron remote</h2>
-      </section>
-      <section data-transition="convex">
-        <h2>Electron roundup</h2>
-      </section>
-      <section data-transition="convex">
-        <h1>What about c++?</h1>
-      </section>
-      <section data-transition="convex">
-        <h2>Nan, node-gyp, stuff</h2>
-      </section>
-      <section data-transition="convex">
-        <h2>Our situation: .vsprojx </h2>
-      </section>
-      <section data-transition="convex">
-        <h2>FFI</h2>
-        <div>Node.js Foreign Function Interface</div>
-        <div>A set of methods to call a function from dynamic library (.dll in case of Windows) via javascript</div>
-        <div>You only build the node-ffi lib itself and provide the lib in compiled state for current architecture</div>
-      </section>
-      <section data-transition="convex">
-        <h2>FFI Disadvantages</h2>
-        <div>no cross-platform build process (or you'll need to roll one on your own)</div>
-        <div>call overhead</div>
-        <div>debugging is horrible</div>
-      </section>
-      <section data-transition="convex">
-        <h2>Step 1: get your library</h2>
-        TODO win screen
-      </section>
-      <section data-transition="convex">
-        <h2>Step 2: reference compiled function</h2>
-        TODO win screen
-      </section>
-      <section data-transition="none">
-        <h2>Step 2: reference compiled function</h2>
-        todo code
-      </section>
-      <section data-transition="convex">
-        <h2>Step 3: call (almost) like an async function</h2>
-        TODO coe
-      </section>
-      <section data-transition="convex">
-        <h2>Node ref</h2>
-        <div>Internally, everything (non-primitive) is sent as raw data in Buffers</div>
-        <div>Provides 'types'</div>
-        <div>(There's a Pointer class in node.js but this is better)</div>
-      </section>
-      <section data-transition="convex">
-        <h2>Node ref</h2>
-          TODO example
-      </section>
-      <section data-transition="convex">
-        <h2>Node ref ref</h2>
-          TODO example
-      </section>
-      <section data-transition="convex">
-        <h2>Video</h2>
-      </section>
-      <section data-transition="convex">
-        <h2>Sum</h2>
-      </section>
-      <section data-transition="convex">
-        <h2>Electron userland?</h2>
+        <h2>Roundup</h2>
+				<ul>
+					<li>write apps just like web frontend</li>
+					<li>access to file system and native window API</li>
+					<li>use and reuse native libraries</li>
+				</ul>
       </section>
       <section data-transition="convex">
         <h2>A case against electron</h2>
+				<img src="flash.png"/>
       </section>
       <section data-transition="convex">
         <h1>Thank you!</h1>
@@ -157,6 +355,9 @@
               { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
                 ]
               });
+							Reveal.addEventListener('firstvideo', function() {
+								document.getElementById('firstvideo').play()
+							}, false )
             </script>
           </body>
           </html>

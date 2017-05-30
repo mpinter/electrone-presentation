@@ -1,0 +1,5 @@
+body .reveal section img, .noImageStyling {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
